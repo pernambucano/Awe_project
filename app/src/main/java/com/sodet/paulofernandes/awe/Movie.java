@@ -4,21 +4,33 @@ package com.sodet.paulofernandes.awe;
 import java.util.ArrayList;
 
 public class Movie {
-    private String title, thumbnailUrl;
+    private String title;
+    private String thumbnailUrl;
+    private String backdropUrl;
+    private String sinopse;
     private double rating;
-    private ArrayList<String> genre;
+
+
+    private String genre;
+
+    private ArrayList<String> sessions;
 
     public Movie()
     {
 
     }
 
-    public Movie(String title, String thumbnailUrl, double rating, ArrayList<String> genre)
+
+
+    public Movie(String title, String thumbnailUrl, double rating, String genre,ArrayList<String> sessions, String backdropUrl, String sinopse)
     {
         this.title = title;
         this.thumbnailUrl = thumbnailUrl;
         this.rating = rating;
         this.genre = genre;
+        this.backdropUrl = backdropUrl;
+        this.sinopse = sinopse;
+        this.sessions = sessions;
 
     }
 
@@ -46,12 +58,40 @@ public class Movie {
         this.rating = rating;
     }
 
-    public ArrayList<String> getGenre() {
+
+
+    public String getBackdropUrl() {
+        return backdropUrl;
+    }
+
+    public void setBackdropUrl(String backdropUrl) {
+        this.backdropUrl = backdropUrl;
+    }
+
+    public String getSinopse() {
+        return sinopse;
+    }
+
+    public void setSinopse(String sinopse) {
+        this.sinopse = sinopse;
+    }
+
+
+    public ArrayList<String> getSessions() {
+        return sessions;
+    }
+
+    public void setSessions(ArrayList<String> sessions) {
+        this.sessions = sessions;
+    }
+
+    public String getGenre() {
         return genre;
     }
 
-    public void setGenre(ArrayList<String> genre) {
+    public void setGenre(String genre) {
         this.genre = genre;
     }
+
 
 }

@@ -2,11 +2,14 @@ package com.sodet.paulofernandes.awe;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.volley.Request;
@@ -29,6 +32,11 @@ public class MainActivity extends Activity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String url = "http://sonae.sodet.biz/api/v1/movies/all/shopping-1";
+    public static final String TITLE = "title";
+    public static final String BACKDROP_URL = "backdropUrl";
+    public static final String RATING = "rating";
+    public static final String SINOPSE = "sinopse";
+    public static final String GENRE = "genre";
     private ProgressDialog  pDialog;
     private List<Movie> movieList = new ArrayList<Movie>();
     private ListView listView;
@@ -48,6 +56,18 @@ public class MainActivity extends Activity {
         pDialog.setMessage("Loading...");
         pDialog.show();
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intentDetail = new Intent(getApplicationContext(), DetailActivity.class);
+                intentDetail.putExtra(TITLE, movieList.get(position).getTitle());
+                intentDetail.putExtra(BACKDROP_URL, movieList.get(position).getBackdropUrl());
+                intentDetail.putExtra(RATING, movieList.get(position).getRating());
+                intentDetail.putExtra(SINOPSE, movieList.get(position).getSinopse());
+                intentDetail.putExtra(GENRE, movieList.get(position).getGenre());
+                startActivity(intentDetail);
+            }
+        });
 
         JsonObjectRequest movieReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -59,14 +79,19 @@ public class MainActivity extends Activity {
                     JSONArray movieArray = jsonObject.getJSONArray("movie");
                     for (int i =0; i < movieArray.length() ; i++)
                     {
-                        JSONObject obj = movieArray.getJSONObject(i);
+                        JSONObject movieObj = movieArray.getJSONObject(i);
                         Movie movie = new Movie();
-                        movie.setTitle(obj.getString("name"));
-                        movie.setThumbnailUrl(obj.getString("poster"));
-                        movie.setRating(((Number) obj.get("imdb_rating")).doubleValue());
+                        movie.setTitle(movieObj.getString("name"));
+                        movie.setThumbnailUrl(movieObj.getString("poster"));
+                        movie.setRating(((Number) movieObj.get("imdb_rating")).doubleValue());
+                        movie.setBackdropUrl((movieObj.getString("backdrop")));
+                        movie.setSinopse(movieObj.getString("sinopse"));
+
+                        movie.setGenre(movieObj.getString("genre"));
+
 
                         movieList.add(movie);
-                        Log.d("one", String.valueOf(movie.getRating()));
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

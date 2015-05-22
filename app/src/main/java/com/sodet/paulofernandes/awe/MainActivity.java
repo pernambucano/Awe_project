@@ -3,7 +3,6 @@ package com.sodet.paulofernandes.awe;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,7 +15,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
@@ -31,7 +29,7 @@ public class MainActivity extends Activity {
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
-    private static final String url = "http://sonae.sodet.biz/api/v1/movies/all/shopping-1";
+    private static final String URL = "http://sonae.sodet.biz/api/v1/movies/all/shopping-1";
     public static final String TITLE = "title";
     public static final String BACKDROP_URL = "backdropUrl";
     public static final String RATING = "rating";
@@ -54,24 +52,26 @@ public class MainActivity extends Activity {
         listView.setAdapter(adapter);
 
         pDialog = new ProgressDialog(this);
-        pDialog.setMessage("Loading...");
+        pDialog.setMessage("Carregando...");
         pDialog.show();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intentDetail = new Intent(getApplicationContext(), DetailActivity.class);
+
                 intentDetail.putExtra(TITLE, movieList.get(position).getTitle());
                 intentDetail.putExtra(BACKDROP_URL, movieList.get(position).getBackdropUrl());
                 intentDetail.putExtra(RATING, movieList.get(position).getRating());
                 intentDetail.putExtra(SINOPSE, movieList.get(position).getSinopse());
                 intentDetail.putExtra(GENRE, movieList.get(position).getGenre());
                 intentDetail.putParcelableArrayListExtra(SESSIONS, movieList.get(position).getSessions());
+
                 startActivity(intentDetail);
             }
         });
 
-        JsonObjectRequest movieReq = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequestUTF8 movieReq = new JsonObjectRequestUTF8(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 Log.d(TAG, jsonObject.toString());
@@ -85,12 +85,13 @@ public class MainActivity extends Activity {
 
                         JSONObject movieObj = movieArray.getJSONObject(i);
                         Movie movie = new Movie();
+
                         movie.setTitle(movieObj.getString("name"));
                         movie.setThumbnailUrl(movieObj.getString("poster"));
                         movie.setRating(((Number) movieObj.get("imdb_rating")).doubleValue());
                         movie.setBackdropUrl((movieObj.getString("backdrop")));
                         movie.setSinopse(movieObj.getString("sinopse"));
-
+                        movie.setDuration(movieObj.getString("duration"));
                         movie.setGenre(movieObj.getString("genre"));
 
                         JSONArray sessionsArray = movieObj.getJSONArray("sessions");
@@ -99,6 +100,7 @@ public class MainActivity extends Activity {
 
                             JSONObject sessionObj = sessionsArray.getJSONObject(j);
                             Session session = new Session();
+
                             session.setIs3d(sessionObj.getBoolean("3D"));
                             session.setDay(sessionObj.getString("day"));
                             session.setDubbed(sessionObj.getBoolean("dubbed"));
@@ -106,6 +108,7 @@ public class MainActivity extends Activity {
 
                             JSONObject roomObj = sessionObj.getJSONObject("room");
                             session.setRoom(new Room(roomObj.getInt("id"), roomObj.getString("name")));
+
                             sessionsList.add(session);
                         }
 

@@ -9,29 +9,26 @@ public class Movie {
     private String backdropUrl;
     private String sinopse;
     private double rating;
-
-
+    private String duration;
     private String genre;
-
     private ArrayList<Session> sessions;
 
+    
     public Movie()
     {
 
     }
 
 
-
-    public Movie(String title, String thumbnailUrl, double rating, String genre,ArrayList<Session> sessions, String backdropUrl, String sinopse)
-    {
+    public Movie(String title, String thumbnailUrl, String backdropUrl, String sinopse, double rating, String duration, String genre, ArrayList<Session> sessions) {
         this.title = title;
         this.thumbnailUrl = thumbnailUrl;
-        this.rating = rating;
-        this.genre = genre;
         this.backdropUrl = backdropUrl;
         this.sinopse = sinopse;
+        this.rating = rating;
+        this.duration = duration;
+        this.genre = genre;
         this.sessions = sessions;
-
     }
 
     public String getTitle() {
@@ -91,6 +88,15 @@ public class Movie {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 
 

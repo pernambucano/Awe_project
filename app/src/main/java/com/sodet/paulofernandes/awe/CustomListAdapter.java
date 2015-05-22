@@ -59,13 +59,24 @@ public class CustomListAdapter extends BaseAdapter{
             imageLoader = AppController.getInstance().getImageLoader();
         }
 
-        NetworkImageView thumbNail = (NetworkImageView) convertView.findViewById(R.id.thumbnail);
-        TextView title = (TextView) convertView.findViewById(R.id.title);
+        NetworkImageView thumbNail = (NetworkImageView) convertView.findViewById(R.id.thumbnailLR);
+        TextView title = (TextView) convertView.findViewById(R.id.titleLR);
 
         Movie m = movieItems.get(position);
 
+        TextView rating = (TextView) convertView.findViewById(R.id.ratingLR);
+        rating.setText("Rating: " + String.format("%.1f", m.getRating()) + "/10");
+
         thumbNail.setImageUrl(m.getThumbnailUrl(), imageLoader);
         title.setText(m.getTitle());
+
+
+        TextView genre = (TextView) convertView.findViewById(R.id.genreLR);
+        genre.setText(m.getGenre());
+
+        TextView duration = (TextView) convertView.findViewById(R.id.durationLR);
+        if (!m.getDuration().equals("null min"))
+            duration.setText(m.getDuration());
 
 
         return convertView;

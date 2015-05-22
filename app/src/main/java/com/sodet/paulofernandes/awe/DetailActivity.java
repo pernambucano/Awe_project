@@ -25,14 +25,44 @@ public class DetailActivity extends ActionBarActivity {
 
 
 
-
-
         Intent intent = getIntent();
         String titleStr = intent.getStringExtra(MainActivity.TITLE);
         String backdropUrl = intent.getStringExtra(MainActivity.BACKDROP_URL);
         Double rating = intent.getDoubleExtra(MainActivity.RATING, 0.0);
         String sinopse = intent.getStringExtra(MainActivity.SINOPSE);
         String genre = intent.getStringExtra(MainActivity.GENRE);
+        ArrayList<Session> sessionsList = intent.getParcelableArrayListExtra(MainActivity.SESSIONS);
+
+
+        StringBuilder sb = new StringBuilder();
+        String lastDay = "";
+        for (int i =0; i < sessionsList.size(); i ++ )
+        {
+            Log.d("Detail", String.valueOf(sessionsList.get(i).getRoom().getName()));
+            String currentDay = sessionsList.get(i).getDay();
+
+            if (!currentDay.equals(lastDay)) {
+                sb.append("\n"+ "Dia :" + currentDay + "\n");
+            }
+                //append to string
+                String hour = sessionsList.get(i).getHour();
+                sb.append(" " + hour);
+
+            if(sessionsList.get(i).is3d())
+                sb.append("3D ");
+
+            if(sessionsList.get(i).isDubbed())
+                sb.append("Dub ");
+
+            sb.append(sessionsList.get(i).getRoom().getName());
+
+            lastDay = currentDay;
+        }
+
+
+
+        TextView sessionsTV = (TextView) findViewById(R.id.sessionTV);
+        sessionsTV.setText(sb.toString());
 
 
 

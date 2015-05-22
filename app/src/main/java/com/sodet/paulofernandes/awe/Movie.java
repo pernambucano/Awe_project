@@ -13,7 +13,7 @@ public class Movie {
 
     private String genre;
 
-    private ArrayList<String> sessions;
+    private ArrayList<Session> sessions;
 
     public Movie()
     {
@@ -22,7 +22,7 @@ public class Movie {
 
 
 
-    public Movie(String title, String thumbnailUrl, double rating, String genre,ArrayList<String> sessions, String backdropUrl, String sinopse)
+    public Movie(String title, String thumbnailUrl, double rating, String genre,ArrayList<Session> sessions, String backdropUrl, String sinopse)
     {
         this.title = title;
         this.thumbnailUrl = thumbnailUrl;
@@ -77,11 +77,11 @@ public class Movie {
     }
 
 
-    public ArrayList<String> getSessions() {
+    public ArrayList<Session> getSessions() {
         return sessions;
     }
 
-    public void setSessions(ArrayList<String> sessions) {
+    public void setSessions(ArrayList<Session> sessions) {
         this.sessions = sessions;
     }
 

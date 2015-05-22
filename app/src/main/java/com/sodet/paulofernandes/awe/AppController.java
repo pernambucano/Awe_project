@@ -8,9 +8,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-/**
- * Created by paulofernandes on 5/18/15.
- */
+
 public class AppController extends Application
 {
 

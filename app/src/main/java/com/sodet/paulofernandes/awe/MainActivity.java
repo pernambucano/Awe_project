@@ -37,6 +37,7 @@ public class MainActivity extends Activity {
     public static final String RATING = "rating";
     public static final String SINOPSE = "sinopse";
     public static final String GENRE = "genre";
+    public static final String SESSIONS = "sessions";
     private ProgressDialog  pDialog;
     private List<Movie> movieList = new ArrayList<Movie>();
     private ListView listView;
@@ -65,6 +66,7 @@ public class MainActivity extends Activity {
                 intentDetail.putExtra(RATING, movieList.get(position).getRating());
                 intentDetail.putExtra(SINOPSE, movieList.get(position).getSinopse());
                 intentDetail.putExtra(GENRE, movieList.get(position).getGenre());
+                intentDetail.putParcelableArrayListExtra(SESSIONS, movieList.get(position).getSessions());
                 startActivity(intentDetail);
             }
         });
@@ -79,6 +81,8 @@ public class MainActivity extends Activity {
                     JSONArray movieArray = jsonObject.getJSONArray("movie");
                     for (int i =0; i < movieArray.length() ; i++)
                     {
+                        ArrayList<Session> sessionsList = new ArrayList<Session>();
+
                         JSONObject movieObj = movieArray.getJSONObject(i);
                         Movie movie = new Movie();
                         movie.setTitle(movieObj.getString("name"));
@@ -89,6 +93,23 @@ public class MainActivity extends Activity {
 
                         movie.setGenre(movieObj.getString("genre"));
 
+                        JSONArray sessionsArray = movieObj.getJSONArray("sessions");
+                        for (int j = 0; j < sessionsArray.length(); j++)
+                        {
+
+                            JSONObject sessionObj = sessionsArray.getJSONObject(j);
+                            Session session = new Session();
+                            session.setIs3d(sessionObj.getBoolean("3D"));
+                            session.setDay(sessionObj.getString("day"));
+                            session.setDubbed(sessionObj.getBoolean("dubbed"));
+                            session.setHour(sessionObj.getString("hour"));
+
+                            JSONObject roomObj = sessionObj.getJSONObject("room");
+                            session.setRoom(new Room(roomObj.getInt("id"), roomObj.getString("name")));
+                            sessionsList.add(session);
+                        }
+
+                        movie.setSessions(sessionsList);
 
                         movieList.add(movie);
 
@@ -99,7 +120,6 @@ public class MainActivity extends Activity {
 
                 adapter.notifyDataSetChanged();
             }
-
 
         }, new Response.ErrorListener() {
             @Override
